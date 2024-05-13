@@ -3,12 +3,12 @@ import classes from "./HeaderCartButton.module.css";
 
 const HeaderCartButton = (props) => {
   return (
-    <button class={classes.button}>
-      <span class={classes.icon}>
+    <button className={classes.button}>
+      <span className={classes.icon}>
         <CartIcon></CartIcon>
       </span>
       <span>Your Cart</span>
-      <span class={classes.badge}>0</span>
+      <span className={classes.badge}>0</span>
     </button>
   );
 };
