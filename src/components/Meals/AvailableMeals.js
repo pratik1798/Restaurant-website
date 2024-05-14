@@ -36,19 +36,19 @@ const AvailableMeals = (props) => {
           <h3>{meal.name}</h3>
           <p className={classes.description}>{meal.description}</p>
           <p className={classes.price}>{`$${meal.price}`}</p>
-          <form>
-            <label htmlFor={meal.id}>Amount</label>
-            <input
-              type="text"
-              id={meal.id}
-              name={meal.id}
-              min="1"
-              max="99"
-              defaultValue="1"
-            />
-            <button type="submit">+Add</button>
-          </form>
         </div>
+        <form className={classes.form}>
+          <label htmlFor={meal.id}>Amount</label>
+          <input
+            type="text"
+            id={meal.id}
+            name={meal.id}
+            min="1"
+            max="99"
+            defaultValue="1"
+          />
+          <button type="submit">+Add</button>
+        </form>
       </li>
     );
   });
