@@ -1,5 +1,7 @@
+import { useContext } from "react";
 import classes from "./AvailableMeals.module.css";
 import Card from "../UI/Card";
+import CartContext from "../../Store/cart-context";
 
 const DUMMY_MEALS = [
   {
@@ -11,7 +13,7 @@ const DUMMY_MEALS = [
   {
     id: "m2",
     name: "Schnitzel",
-    description: "A german specialty!",
+    description: "A German specialty!",
     price: 16.5,
   },
   {
@@ -29,25 +31,39 @@ const DUMMY_MEALS = [
 ];
 
 const AvailableMeals = (props) => {
+  const cartCtx = useContext(CartContext);
+
+  const addItemToCart = (event, meal) => {
+    event.preventDefault();
+    const quantity = document.getElementById(`amount_${meal.id}`).value;
+    cartCtx.addItem({ ...meal, quantity: +quantity });
+  };
+
   const mealsList = DUMMY_MEALS.map((meal) => {
     return (
       <li className={classes.meal} key={meal.id}>
         <div>
           <h3>{meal.name}</h3>
           <p className={classes.description}>{meal.description}</p>
-          <p className={classes.price}>{`$${meal.price}`}</p>
+          <p className={classes.price}>{`$${meal.price.toFixed(2)}`}</p>
         </div>
-        <form className={classes.form}>
-          <label htmlFor={meal.id}>Amount</label>
+
+        <form
+          className={classes.form}
+          onSubmit={(event) => addItemToCart(event, meal)}
+        >
+          <label htmlFor={`amount_${meal.id}`}>Amount</label>
           <input
-            type="text"
-            id={meal.id}
-            name={meal.id}
+            type="number"
+            id={`amount_${meal.id}`}
+            name="amount"
             min="1"
             max="99"
             defaultValue="1"
           />
-          <button type="submit">+Add</button>
+          <button type="submit" onClick={props.addItemToCart}>
+            +Add
+          </button>
         </form>
       </li>
     );
