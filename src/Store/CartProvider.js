@@ -7,27 +7,58 @@ const CartProvider = (props) => {
 
   const addItemToCartHandler = (item) => {
     updateItems((prevItems) => {
-      const havingSameId = prevItems.findIndex(
+      const existingItemIndex = prevItems.findIndex(
         (cartItem) => cartItem.id === item.id
       );
+
+      let updatedItems;
       let updatedAmount;
 
-      if (havingSameId !== -1) {
-        const updatedCartItems = [...prevItems];
-        const existingCartItem = updatedCartItems[havingSameId];
-        existingCartItem.quantity += item.quantity;
-        updatedAmount = totalAmount + item.quantity * item.price;
-        setTotalAmount(updatedAmount);
-        return updatedCartItems;
+      if (existingItemIndex !== -1) {
+        updatedItems = [...prevItems];
+        const existingItem = updatedItems[existingItemIndex];
+        existingItem.quantity += item.quantity;
       } else {
-        updatedAmount = totalAmount + item.quantity * item.price;
-        setTotalAmount(updatedAmount);
-        return [...prevItems, item];
+        updatedItems = [...prevItems, item];
       }
+
+      updatedAmount = totalAmount + item.quantity * item.price;
+      setTotalAmount(updatedAmount);
+
+      return updatedItems;
     });
   };
 
-  const removeItemFromCartHandler = (id) => {};
+  const removeItemFromCartHandler = (item) => {
+    updateItems((prevItems) => {
+      const existingItemIndex = prevItems.findIndex(
+        (cartItem) => cartItem.id === item.id
+      );
+
+      let updatedItems;
+      let updatedAmount;
+
+      if (existingItemIndex !== -1) {
+        const existingItem = prevItems[existingItemIndex];
+
+        if (existingItem.quantity === 1) {
+          updatedItems = prevItems.filter(
+            (cartItem) => cartItem.id !== item.id
+          );
+        } else {
+          updatedItems = [...prevItems];
+          existingItem.quantity -= 1;
+        }
+
+        updatedAmount = totalAmount - item.price;
+        setTotalAmount(updatedAmount);
+
+        return updatedItems;
+      }
+
+      return prevItems;
+    });
+  };
 
   const cartContext = {
     items: items,
